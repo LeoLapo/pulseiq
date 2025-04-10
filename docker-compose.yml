@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  stock-service:
+    build: ./stock-service
+    ports:
+      - "8080:8080"
+    environment:
+      - ENV=development
+    volumes:
+      - ./stock-service/logs:/root/logs
