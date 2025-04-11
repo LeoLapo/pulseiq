@@ -5,6 +5,15 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
+	// Rota raiz
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.JSON(map[string]string{
+			"message": "Bem-vindo ao Stock Service!",
+			"version": "1.0",
+		})
+	})
+
+	// Rotas de stocks
 	stocks := app.Group("/stocks")
 	stocks.Get("/:symbol", getStockRealTime)
 	stocks.Get("/:symbol/history", getStockHistory)
@@ -23,10 +32,13 @@ func getStockRealTime(c *fiber.Ctx) error {
 
 func getStockHistory(c *fiber.Ctx) error {
 	symbol := c.Params("symbol")
-	data := []map[string]interface{}{
-		{"date": "2025-04-01", "price": 120.00},
-		{"date": "2025-04-02", "price": 121.50},
-		{"date": "2025-04-03", "price": 123.45},
+	data := map[string]interface{}{
+		"symbol":  symbol,
+		"history": []map[string]interface{}{
+			{"date": "2025-04-01", "price": 120.00},
+			{"date": "2025-04-02", "price": 121.50},
+			{"date": "2025-04-03", "price": 123.45},
+		},
 	}
 	return c.JSON(data)
 }
