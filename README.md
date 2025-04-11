@@ -45,3 +45,33 @@ A microservices-based architecture for real-time stock tracking, custom alerts, 
 ```bash
 git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
+
+
+### 2. Build and start the services
+
+docker-compose up --build
+
+### 3. Access the system
+
+    Frontend: http://localhost:3000
+
+    API Gateway: http://localhost:8000 (adjust if needed)
+
+## 📁 Project Structure
+
+.
+├── stock-service/
+├── alert-service/
+├── notification-service/
+├── frontend/
+├── gateway/
+├── docker-compose.yml
+└── README.md
+
+## 📌 TODO
+
+Implement automated tests
+
+Add Swagger/OpenAPI documentation
+
+Integrate with real data providers (e.g. Yahoo Finance)
