@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 	"time"
+	"sort"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
@@ -61,16 +62,13 @@ func SetupRoutes(app *fiber.App) {
 }
 
 func getStockRealTime(c *fiber.Ctx) error {
-	symbol := c.Params("symbol")
-	if symbol != "IBM" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Only IBM is supported for now"})
-	}
+	symbol := c.Params("symbol") // Ex: AAPL, MSFT, etc.
 
 	client := resty.New()
 	resp, err := client.R().
 		SetQueryParams(map[string]string{
-			"function": "TIME_SERIES_DAILY", // Mudança para diário
-			"symbol":   "IBM",
+			"function": "TIME_SERIES_DAILY", // Consulta diária
+			"symbol":   symbol,              // <- Agora usa o valor passado na URL
 			"apikey":   "45Z022J17RPSNA2T",
 		}).
 		Get("https://www.alphavantage.co/query")
@@ -125,16 +123,13 @@ func getStockRealTime(c *fiber.Ctx) error {
 }
 
 func getStockHistory(c *fiber.Ctx) error {
-	symbol := c.Params("symbol")
-	if symbol != "IBM" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Only IBM is supported for now"})
-	}
+	symbol := strings.ToUpper(c.Params("symbol"))
 
 	client := resty.New()
 	resp, err := client.R().
 		SetQueryParams(map[string]string{
 			"function": "TIME_SERIES_DAILY",
-			"symbol":   "IBM",
+			"symbol":   symbol,
 			"apikey":   "45Z022J17RPSNA2T",
 		}).
 		Get("https://www.alphavantage.co/query")
@@ -155,17 +150,16 @@ func getStockHistory(c *fiber.Ctx) error {
 	}
 
 	if result.Information != "" {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "API returned an error", "details": result.Information})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid symbol or API error", "details": result.Information})
 	}
 
-	// Pegar as datas e ordenar
+	// pegar os 7 dias mais recentes
 	dates := make([]string, 0, len(result.TimeSeries))
 	for date := range result.TimeSeries {
 		dates = append(dates, date)
 	}
-	sort.Sort(sort.Reverse(sort.StringSlice(dates))) // ordenar do mais recente pro mais antigo
+	sort.Sort(sort.Reverse(sort.StringSlice(dates)))
 
-	// Pegar só os 7 mais recentes
 	history := make([]map[string]interface{}, 0, 7)
 	for i, date := range dates {
 		if i >= 7 {

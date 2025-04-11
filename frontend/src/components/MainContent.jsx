@@ -4,41 +4,49 @@ import Chart from 'chart.js/auto';
 function MainContent({ selectedStock }) {
   const [stockData, setStockData] = useState(null);
   const [chart, setChart] = useState(null);
-
-  const getMockStockData = (symbol) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const labels = [];
-        const prices = [];
-        let price = Math.random() * 100 + 50;
-        const now = new Date();
-
-        for (let i = 10; i >= 0; i--) {
-          const date = new Date(now);
-          date.setDate(now.getDate() - i);
-          labels.push(date.toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' }));
-          price += (Math.random() - 0.45) * 5;
-          price = Math.max(10, price);
-          prices.push(price.toFixed(2));
-        }
-
-        resolve({
-          symbol,
-          companyName: `Empresa ${symbol} S.A.`,
-          latestPrice: prices[prices.length - 1],
-          changePercent: ((prices[prices.length - 1] - prices[0]) / prices[0] * 100).toFixed(2),
-          chartData: { labels, prices },
-        });
-      }, 500);
-    });
+  const brToUsStockMap = {
+    PETR4: 'XOM',    // Exxon Mobil ~ Petrobras
+    VALE3: 'RIO',    // Rio Tinto ~ Vale
+    ITUB4: 'JPM',    // JPMorgan ~ Itaú
+    BBDC4: 'IBM',
   };
+  
+
+  const fetchStockData = async (symbol) => {
+    const response = await fetch(`http://localhost:3000/stocks/${symbol}/history`);
+    const data = await response.json();
+  
+    if (!data.history) throw new Error("Erro ao carregar dados");
+  
+    const labels = data.history.map(item => {
+      const date = new Date(item.date);
+      return date.toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' });
+    });
+  
+    const prices = data.history.map(item => parseFloat(item.price).toFixed(2));
+    const latestPrice = prices[prices.length - 1];
+    const changePercent = ((latestPrice - prices[0]) / prices[0] * 100).toFixed(2);
+  
+    return {
+      symbol,
+      companyName: `Empresa ${symbol}`, // ou pode mapear nomes reais depois
+      latestPrice,
+      changePercent,
+      chartData: { labels, prices },
+    };
+  };
+  
 
   useEffect(() => {
     if (selectedStock) {
-      getMockStockData(selectedStock).then((data) => {
-        setStockData(data);
-        updateChart(data);
-      });
+      const usSymbol = brToUsStockMap[selectedStock] || selectedStock;
+
+      fetch(`http://localhost:5000/api/stock/${usSymbol}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setStockData(data);
+          updateChart(data);
+        });
     }
   }, [selectedStock]);
 
