@@ -1,4 +1,4 @@
-# 📈 Microservices for Stock Monitoring
+# 📈 Stock Monitoring
 
 A microservices-based architecture for real-time stock tracking, custom alerts, and push/email notifications.
 
