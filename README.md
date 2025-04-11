@@ -59,6 +59,7 @@ docker-compose up --build
 
 ## 📁 Project Structure
 
+```
 .
 ├── stock-service/
 ├── alert-service/
@@ -67,6 +68,7 @@ docker-compose up --build
 ├── gateway/
 ├── docker-compose.yml
 └── README.md
+```
 
 ## 📌 TODO
 
