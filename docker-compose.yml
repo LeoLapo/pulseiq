@@ -8,3 +8,9 @@ services:
       - ENV=development
     volumes:
       - ./stock-service/logs:/root/logs
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - ENV=development
