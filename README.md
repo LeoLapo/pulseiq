@@ -79,5 +79,3 @@ docker-compose up --build
 Implement automated tests
 
 Add Swagger/OpenAPI documentation
-
-Integrate with real data providers (e.g. Yahoo Finance)
