@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 function Sidebar({ onStockSelect }) {
-  const stocks = ['PETR4', 'VALE3', 'ITUB4', 'BBDC4'];
+  const stocks = ['IBM', 'AAPL', 'JPM', 'BBDC4'];
   const [activeStock, setActiveStock] = useState(null);
 
   const handleClick = (symbol) => {
