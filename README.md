@@ -1,4 +1,4 @@
-# 📈 PulseIQ(Stock Monitoring)
+# 📈 PulseIQ (Stock Monitoring)
 
 A microservices-based architecture for real-time stock tracking, custom alerts, and push/email notifications.
 
@@ -56,15 +56,16 @@ docker-compose up --build
 
 ### 3. Access the system
 
-    Frontend: http://localhost:3000
+    Frontend: http://localhost:3000](http://localhost:5173/
 
-    API Gateway: http://localhost:8000 (adjust if needed)
+    API Gateway: http://localhost:8080 (adjust if needed)
 
 ## 📁 Project Structure
 
 ```
 .
 ├── stock-service/
+├── auth-service/
 ├── alert-service/
 ├── notification-service/
 ├── frontend/
