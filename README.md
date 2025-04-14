@@ -1,16 +1,19 @@
-# 📈 Stock Monitoring
+# 📈 PulseIQ(Stock Monitoring)
 
 A microservices-based architecture for real-time stock tracking, custom alerts, and push/email notifications.
 
 ## 🧩 Services
 
-- **`stock-service`** (Go + Fiber)  
+- **`stock-service`** (Go) - Implemented  
   Real-time stock price lookup and historical data.
 
-- **`alert-service`** (Python + FastAPI)  
+- **`auth-service`** (Go) - Implemented
+  own authentication service, with token and direct sending to the user's email.
+
+- **`alert-service`** (Python + FastAPI) - No Implemented  
   Custom alert system based on user-defined thresholds.
 
-- **`notification-service`** (Node.js + NestJS)  
+- **`notification-service`** (Node.js + NestJS)  No Implemented
   Notification delivery via Push or Email.
 
 ## 💻 Frontend
